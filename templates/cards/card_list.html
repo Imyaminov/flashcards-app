@@ -1,5 +1,15 @@
 {% extends './home.html' %}
+{% load humanize %}
 
 {% block content %}
-<h2>Welcome to your Flashcards app!</h2>
+    <h2>
+        All Cards
+    </h2>
+    <a href="{% url 'card-form' %}">New Card</a>
+    {% for card in card_list %}
+        {% ifchanged %}
+            <h3>🗃 {{ card.box|ordinal }} Box</h3>
+        {% endifchanged %}
+        {% include './card.html' %}
+    {% endfor %}
 {% endblock %}

@@ -1,0 +1,13 @@
+{% extends './home.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h3>✨Create New Card</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit">Save Card</button>
+    </form>
+    <a href="{% url 'card-list' %}">Cancel</a>
+{% endblock %}
+
