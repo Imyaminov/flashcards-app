@@ -17,5 +17,14 @@ class Card(BaseModel):
     class Meta():
         ordering = ['box']
 
-    def __str__(self):
+    def ___str__(self):
         return "{} - {}".format(self.question, self.answer)
+
+    def move(self, solved):
+        new_box = self.box + 1 if solved else BOXES[0]
+        if new_box in BOXES:
+            self.box = new_box
+            self.save()
+        return self
+
+

@@ -1,0 +1,11 @@
+{% extends './home.html' %}
+{% laod humanize %}
+
+{% block content %}
+    <h2>🗃 {{ box_number | ordinal }} Box</h2>
+    <mark>{{ object_list | length }}</mark> Card{{ object_list | pluralize }} left in box.
+    <hr>
+    {% for card in box_cards %}
+        {% include "cards/card.html" %}
+    {% endfor %}
+{% endblock %}

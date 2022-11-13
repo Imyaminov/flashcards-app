@@ -2,7 +2,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <h3>✨Create New Card</h3>
+    {% if card %}
+        <h2>✏ Edit Card</h2>
+    {% else %}
+        <h3>✨ Create New Card</h3>
+    {% endif %}
+
     <form action="" method="POST">
         {% csrf_token %}
         {{form|crispy}}
