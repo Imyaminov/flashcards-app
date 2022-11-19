@@ -2,11 +2,11 @@
 
 <article>
     <h4>{{ card.question }}</h4>
-    <h4></h4>
     {% if not check_card %}
         <p>{{ card.answer }}</p>
         <hr>
         <a href="{% url 'card-update' card.id %}" role="button">✏ Edit Card</a>
+        <a href="{% url 'change-status' card.id %}" role="button">Archive Card</a>
     {% else %}
         <details>
                 <summary>Reveal Answer</summary>

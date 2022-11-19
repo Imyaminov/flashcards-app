@@ -4,7 +4,10 @@ from .views import (
     CardListView,
     CardCreateView,
     CardUpdateView,
-    BoxView
+    BoxView,
+    ArchivedCardListView,
+    change_status,
+    # ArchiveUnarchiveCard
 )
 
 urlpatterns = [
@@ -13,4 +16,6 @@ urlpatterns = [
     path('card/new', CardCreateView.as_view(), name='card-create'),
     path('card/<int:pk>/update', CardUpdateView.as_view(), name='card-update'),
     path('box/<int:box_num>', BoxView.as_view(), name='box'),
+    path('archive/<int:pk>', change_status, name='change-status'),
+    path('archived_cards/', ArchivedCardListView.as_view(), name='archived-cards'),
 ]

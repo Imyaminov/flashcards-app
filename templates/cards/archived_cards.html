@@ -1,0 +1,19 @@
+{% extends './home.html' %}
+{% load humanize %}
+
+{% block content %}
+    <h2>
+        Archived Cards
+    </h2>
+    {% for card in archived_cards %}
+        {% ifchanged %}
+            <h3>🗃 {{ card.box|ordinal }} Box</h3>
+        {% endifchanged %}
+        <article>
+            <h4>{{card.question}}</h4>
+            <p>{{card.answer}}</p> <hr>
+            <a href="{% url 'card-update' card.id %}" role="button">✏ Edit Card</a>
+            <a href="{% url 'change-status' card.id %}" role="button"> Unarchive Card</a>
+        </article>
+    {% endfor %}
+{% endblock %}
