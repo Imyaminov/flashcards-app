@@ -37,3 +37,6 @@ class Card(BaseModel):
 
     def __str__(self):
         return "{} - {}".format(self.question, self.answer)
+
+# class Folder()
+# class StudySet()

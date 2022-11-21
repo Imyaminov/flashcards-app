@@ -1,12 +1,14 @@
-{% extends './home.html' %}
+{% extends './base.html' %}
 {% load humanize %}
 
 {% block content %}
+    {% include 'cards/success_message.html' %}
     <h2>
         All Cards
     </h2>
 <!--    <a href="{% url 'card-create' %}">✨New Card</a>-->
-    <a href="{% url 'card-create' %}" role="button">✨ New Card</a>
+    <a href="{% url 'card-create' %}" role="button" >✨ New Card</a>
+    <br><br>
     {% for card in card_list %}
         {% ifchanged %}
             <h3>🗃 {{ card.box|ordinal }} Box</h3>

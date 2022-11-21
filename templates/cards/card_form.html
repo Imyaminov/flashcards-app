@@ -1,10 +1,11 @@
-{% extends './home.html' %}
+{% extends './base.html' %}
 {% load crispy_forms_tags %}
 
 {% block content %}
     {% if card %}
         <h2>✏ Edit Card</h2>
     {% else %}
+        {% include 'cards/success_message.html' %}
         <h3>✨ Create New Card</h3>
     {% endif %}
 

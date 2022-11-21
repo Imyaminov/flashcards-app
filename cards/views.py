@@ -6,6 +6,9 @@ from django.views.generic import (
     CreateView,
     UpdateView,
 )
+from django.contrib.messages.views import (
+    SuccessMessageMixin,
+)
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from .models import Card
@@ -46,13 +49,18 @@ class BoxView(CardListView):
 
         return redirect(request.META.get('HTTP_REFERER'))
 
-class CardCreateView(CreateView):
+
+class CardCreateView(SuccessMessageMixin, CreateView):
     model = Card
     fields = ('question', 'answer', 'box')
     success_url = reverse_lazy('card-create')
+    success_message = "The card is created successfully!"
+
 
 class CardUpdateView(CardCreateView, UpdateView):
     success_url = reverse_lazy('card-list')
+    success_message = "The card is updated successfully!"
+
 
 class ArchivedCardListView(ListView):
     context_object_name = 'archived_cards'
@@ -61,9 +69,9 @@ class ArchivedCardListView(ListView):
     def get_queryset(self):
         return Card.objects.all().filter(is_archive=True)
 
-def change_status(request, pk):
 
-    print('entered post method')
+def change_status(request, pk):
+    # print('entered <change_status> method')
     card = get_object_or_404(Card, id=pk)
     card.archive_unarchive_card()
     if card.is_archive == True:

@@ -1,0 +1,11 @@
+{% if messages %}
+    {% for message in messages %}
+            <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+                <i class="bi-check-circle-fill"></i>
+                <strong class="mx-2">Success!</strong> {{message}}
+                <button type="button" class="close" data-bs-dismiss="alert">
+<!--                    <smail><sup>x</sup></smail>-->
+                </button>
+            </div>
+    {% endfor %}
+{% endif %}

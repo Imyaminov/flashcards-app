@@ -3,7 +3,7 @@
 <!-- 'boxes' key is from inclusion tag function-->
 {% for box in boxes %}
     <a href="{% url 'box' box_num=box.number %}">
-        🗃 {{ box.number | ordinal }} Box <mark>{{ box.card_count }}</mark>
+        🗃 {{ box.number | ordinal }} Box <mark style="background-color: var(--marked);border-radius: 4px;padding: 2px 5px;">{{ box.card_count }}</mark>
     </a>
 {% endfor %}
 <a href="{% url 'archived-cards' %}">🗃️ Archive </a>
