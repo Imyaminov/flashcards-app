@@ -7,7 +7,6 @@ from .views import (
     BoxView,
     ArchivedCardListView,
     change_status,
-    # ArchiveUnarchiveCard
 )
 
 urlpatterns = [

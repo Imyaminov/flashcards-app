@@ -1,10 +1,29 @@
 from django.db import models
 from helpers.models import BaseModel
-
+from common.models import CustomUser
 # Create your models here.
 
 NUM_BOXES = 5
 BOXES = list(range(1, NUM_BOXES+1))
+
+# class Folder(BaseModel):
+#     title = models.CharField(max_length=1024)
+#     description = models.TextField(null=True, blank=True)
+#
+#     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return self.title
+
+class StudySet(BaseModel):
+    title = models.CharField(max_length=1024)
+    description = models.TextField(null=True, blank=True)
+
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    # folder = models.ForeignKey(Folder, on_delete=models.DO_NOTHING, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
 
 class Card(BaseModel):
     question = models.CharField(max_length=1024)
@@ -17,6 +36,7 @@ class Card(BaseModel):
         verbose_name='Archive Card',
         default=False
     )
+    study_set = models.ForeignKey(StudySet, on_delete=models.CASCADE)
 
     class Meta():
         ordering = ['box']
@@ -37,24 +57,6 @@ class Card(BaseModel):
 
     def __str__(self):
         return "{} - {}".format(self.question, self.answer)
-
-# class StudySet(BaseModel):
-#     title = models.CharField(max_length=1024)
-#     description = models.TextField(null=True, blank=True)
-#
-#     card = models.ForeignKey(Card, on_delete=models.DO_NOTHING)
-#
-#     def __str__(self):
-#         return self.title
-#
-# class Folder(BaseModel):
-#     title = models.CharField(max_length=1024)
-#     description = models.TextField(null=True, blank=True)
-#
-#     study_set = models.ForeignKey(StudySet, on_delete=models.DO_NOTHING)
-#
-#     def __str__(self):
-#         return self.title
 
 
 
