@@ -6,21 +6,21 @@ from common.models import CustomUser
 NUM_BOXES = 5
 BOXES = list(range(1, NUM_BOXES+1))
 
-# class Folder(BaseModel):
-#     title = models.CharField(max_length=1024)
-#     description = models.TextField(null=True, blank=True)
-#
-#     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return self.title
+class Folder(BaseModel):
+    title = models.CharField(max_length=1024)
+    description = models.TextField(null=True, blank=True)
+
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
 
 class StudySet(BaseModel):
     title = models.CharField(max_length=1024)
     description = models.TextField(null=True, blank=True)
 
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    # folder = models.ForeignKey(Folder, on_delete=models.DO_NOTHING, blank=True, null=True)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_studyset')
+    folder = models.ForeignKey(Folder, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
         return self.title

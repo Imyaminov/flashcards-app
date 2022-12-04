@@ -7,6 +7,8 @@ from .views import (
     BoxView,
     ArchivedCardListView,
     change_status,
+    StudySetCreateView,
+    FolderCreateView
 )
 
 urlpatterns = [
@@ -17,4 +19,6 @@ urlpatterns = [
     path('box/<int:box_num>', BoxView.as_view(), name='box'),
     path('archive/<int:pk>', change_status, name='change-status'),
     path('archived_cards/', ArchivedCardListView.as_view(), name='archived-cards'),
+    path('studyset/new', StudySetCreateView.as_view(), name='studyset-create'),
+    path('folder/new', FolderCreateView.as_view(), name='folder-create'),
 ]

@@ -3,5 +3,5 @@
 
 <nav>
     <a href="{% url 'card-list' %}">🗂 All Cards</a>
-    {% boxes_as_links %}
+    {% boxes_as_links user.username %}
 </nav>

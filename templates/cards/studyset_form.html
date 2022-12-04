@@ -1,0 +1,20 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    {% if card %}
+        <h2>✏ Edit Study Set</h2>
+    {% else %}
+        {% include 'cards/success_message.html' %}
+        <h3>✨ Create New Study Set</h3>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" value="Save Study Set">
+    </form>
+    <a href="{% url 'card-list' %}">Cancel</a>
+    <br><br>
+{% endblock %}
+

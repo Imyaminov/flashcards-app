@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     Card,
     StudySet,
-    # Folder,
+    Folder,
 )
 
 # Register your models here.
@@ -10,8 +10,8 @@ from .models import (
 class CardInline(admin.TabularInline):
     model = Card
 
-# class StudySetInline(admin.TabularInline):
-#     model = StudySet
+class StudySetInline(admin.TabularInline):
+    model = StudySet
 
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
@@ -24,11 +24,11 @@ class StudySetAdmin(admin.ModelAdmin):
         CardInline,
     )
 
-# @admin.register(Folder)
-# class FolderAdmin(admin.ModelAdmin):
-#     list_display = "__all__"
-#     inlines = (
-#         StudySetInline,
-#     )
+@admin.register(Folder)
+class FolderAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'author')
+    inlines = (
+        StudySetInline,
+    )
 
 
