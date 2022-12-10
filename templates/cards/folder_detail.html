@@ -1,0 +1,29 @@
+{% extends './base.html' %}
+{% load humanize %}
+
+{% block content %}
+    {% if folder_studysets %}
+        <h4><small>{{folder_studysets.count}} set{{folder_studysets.count|pluralize:'s'}}</small></h4>
+    {% endif %}
+    <h1>📂 {{folder_detail.title}}</h1>
+    {% for set in folder_studysets %}
+        <div class="card w-100">
+              <div class="card-body " >
+                  <div class="card-header">
+                      <small>{{set.studyset_cards.count}} term{{set.studyset_cards.count|pluralize:'s'}}</small>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">{{set.title}}</h5>
+                    <p class="card-text">{{set.description}}</p>
+                    <a href="{% url 'studyset-detail' set.id %}" class="btn btn-primary btn-sm">Learn</a>
+                    <a href="{% url 'folder-set-remove' set.id %}">
+                        <button type="button" class="btn btn-outline-danger btn-sm">Remove</button>
+                    </a>
+                  </div>
+              </div>
+        </div><br>
+    {% endfor %}
+    <div class="d-grid gap-2 ">
+        <a class="btn btn-primary btn-lg btn-block btn-sm" href="{% url 'studyset-create' %}" role="button">Add Set</a>
+    </div>
+{% endblock %}

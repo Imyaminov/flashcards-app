@@ -1,0 +1,46 @@
+{% extends './base.html' %}
+{% load humanize %}
+
+{% block content %}
+    {% if studyset_cards %}
+        <h5><small>{{studyset_cards.count}} card{{studyset_cards.count|pluralize:'s'}}</small></h5>
+    {% endif %}
+    <div>
+    <h1>{{studyset_detail.title}}
+    <a class="btn btn-outline-secondary btn-sm rounded-circle" href="{% url 'studyset-update' studyset_detail.id %}" >🖊️</a>
+<!--    <a class="btn btn-outline-primary btn-sm rounded-circle" href='' >🗑️</a>-->
+    </h1>
+    </div>
+    {% if studyset_cards %}
+
+    <table class="table" style="width: 100%;">
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Question</th>
+              <th scope="col">Answer</th>
+              <th scope="col">Edit Term</th>
+              <th scope="col">Delete Term</th>
+            </tr>
+        </thead>
+          <tbody>
+              {% for card in studyset_cards %}
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{card.question}}</td>
+                  <td>{{card.answer}}</td>
+                  <td><a class="btn btn-outline-primary btn-sm" href="{% url 'card-update' card.id %}" >✏ Edit </a></td>
+                  <td><a class="btn btn-outline-danger btn-sm" href="#myModal" data-toggle="modal"  >❌ Delete </a></td>
+                  {% include 'cards\card_delete_confirm.html' %}
+                </tr>
+              {% endfor %}
+          </tbody>
+    </table>
+    {% else %}
+        <h4><small>No cards in this Set!</small></h4>
+    {% endif %}
+
+    <div class="d-grid gap-2 ">
+        <a class="btn btn-primary" href="{% url 'card-create' %}" role="button">Add term</a>
+    </div>
+{% endblock %}

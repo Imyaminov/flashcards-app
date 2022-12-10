@@ -1,46 +1,70 @@
-<style>
+
     /* Custom CSS */
 
-    :root {
-        --accent: #6e48ad;
-        --accent-bg: white;
-        --bg: #fff;
-        --text: #212121;
-        --text-light: #585858;
-        --border: #d8dae1;
-        --code: #d81b60;
-        --preformatted: #444;
-    }
+:root {
+    --accent: #6e48ad;
+    --accent-bg: white;
+    --bg: #fff;
+    --text: #212121;
+    --text-light: #585858;
+    --border: #d8dae1;
+    --code: #d81b60;
+    --preformatted: #444;
+}
 
-    article {
-        background-color: var(--marked);
-        border: 1px solid var(--border);
-        border-radius: 5px;
-        padding: 1em;
-        margin: 1em 0;
-    }
+article {
+    background-color: var(--marked);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1em;
+    margin: 1em 0;
+}
 
-    h2 {
-        text-align: center;
-    }
+h2 {
+    text-align: center;
+}
 
-    h2, h4 {
-        margin-top: 0;
-    }
+h2, h4 {
+    margin-top: 0;
+}
 
-    hr {
-        background: var(--accent);
-        border-color: var(--accent);
-    }
+hr {
+    background: var(--accent);
+    border-color: var(--accent);
+}
 
-    button,
-    a[role="button"] {
-        color: white;
-        text-decoration: none;
+button,
+a[role="button"] {
+    color: white;
+    text-decoration: none;
 
-    }
+}
 
-    input, select, textarea {
-        width: 100%;
-    }
-</style>
+input, select, textarea {
+    width: 100%;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+.list-group-horizontal .list-group-item {
+margin-bottom: 0;
+margin-left: -4px;
+margin-right: 0;
+border-right-width: 0;
+}
+#customers {
+ font-family: Arial, Helvetica, sans-serif;
+ border-collapse: collapse;
+ width: 100%;
+}
+table {
+ width: 100%;
+}

@@ -18,9 +18,26 @@ class Folder(BaseModel):
 class StudySet(BaseModel):
     title = models.CharField(max_length=1024)
     description = models.TextField(null=True, blank=True)
+    card_count = models.PositiveIntegerField(default=0)
 
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_studyset')
-    folder = models.ForeignKey(Folder, on_delete=models.DO_NOTHING, blank=True, null=True)
+    folder = models.ForeignKey(
+        Folder,
+        on_delete=models.DO_NOTHING,
+        blank=True, null=True,
+        related_name='folder_studyset'
+    )
+
+    def cards_count(self):
+        self.card_count = Card.objects.all().filter(study_set=self.pk).count()
+        return self.card_count
+
+    def studyset_cards(self):
+        return Card.objects.all().filter(study_set=self.id)
+
+    def save(self, *args, **kwargs):
+        self.card_count = Card.objects.all().filter(study_set=self.pk).count()
+        super(StudySet, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -36,7 +53,7 @@ class Card(BaseModel):
         verbose_name='Archive Card',
         default=False
     )
-    study_set = models.ForeignKey(StudySet, on_delete=models.CASCADE)
+    study_set = models.ForeignKey(StudySet, on_delete=models.CASCADE, related_name='studyset')
 
     class Meta():
         ordering = ['box']

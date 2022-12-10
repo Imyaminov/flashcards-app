@@ -7,15 +7,32 @@
         All Cards
     </h2>
     <div class="btn-group">
-        <div class=" dropdown show">
+        <div class="dropdown show">
           <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Your Library
           </a>
-
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="{% url 'studyset-create' %}">Study Set</a>
-            <a class="dropdown-item" href="{% url 'folder-create' %}">Folder</a>
-          </div>
+          <ul class="dropdown-menu">
+              <li class="dropdown-submenu">
+                <a class="test" tabindex="-1">Study Set</a>
+                <ul class="dropdown-menu">
+                    {% for set in study_set %}
+                        <li><a class="dropdown-item" href="{% url 'studyset-detail' set.id %}">
+                            {{set.title}}
+                        </a></li>
+                    {% endfor %}
+                 </ul>
+              </li>
+              <li class="dropdown-submenu">
+                <a class="test" tabindex="-1">Folder</a>
+                <ul class="dropdown-menu">
+                    {% for folder in folders %}
+                        <li><a class="dropdown-item" href="{% url 'folder-detail' folder.id %}">
+                            {{folder.title}}
+                        </a></li>
+                    {% endfor %}
+                 </ul>
+              </li>
+          </ul>
         </div>
 
         <div class=" dropdown show">
@@ -44,6 +61,16 @@
         {% endifchanged %}
         {% include './card.html' %}
     {% endfor %}
-{% endblock %}
 
+    <script>
+        $(document).ready(function(){
+          $('.dropdown-submenu a.test').on("click", function(e){
+            $(this).next('ul').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+          });
+        });
+    </script>
+
+{% endblock %}
 
