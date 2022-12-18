@@ -179,6 +179,15 @@ class FolderCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+# returns user's all studysets which has no folder
+def FolderNoneSetList(request, folder):
+    folder_none_sets = StudySet.objects.all().filter(folder=None)
+    context = {
+        'sets': folder_none_sets,
+        'folder': folder,
+    }
+    return render(request, 'cards/folder_addset.html', context)
+
 def FolderSetRemove(self, pk):
     set = StudySet.objects.all().get(pk=pk)
     folder = set.folder.pk
@@ -186,12 +195,14 @@ def FolderSetRemove(self, pk):
     set.save()
     return redirect('folder-detail', pk=folder)
 
+def FolderSetAdd(self, folder_id, set_id):
+    set = StudySet.objects.get(pk=set_id)
+    set.folder = Folder.objects.get(pk=folder_id)
+    set.save()
+    return redirect('folder-none-set', folder=folder_id)
+
 def get_user(self, request):
-    return self.Frequest.user
-
-
-
-
+    return self.request.user
 
 
 

@@ -1,5 +1,4 @@
 
-    /* Custom CSS */
 
 :root {
     --accent: #6e48ad;
@@ -13,11 +12,11 @@
 }
 
 article {
-    background-color: var(--marked);
     border: 1px solid var(--border);
     border-radius: 5px;
     padding: 1em;
     margin: 1em 0;
+    background: #fffad9;
 }
 
 h2 {

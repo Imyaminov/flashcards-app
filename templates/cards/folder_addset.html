@@ -1,0 +1,18 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h3>✨ Add a set</h3>
+    <br>
+    {% for set in sets %}
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{% url 'studyset-detail' set.id %}" >{{set.title}}</a>
+                <a class="btn btn-outline-primary" href="{% url 'folder-set-add' folder_id=folder set_id=set.id %}" >Add</a>
+            </li>
+        </ul>
+        <br>
+    {% endfor %}
+    <a class="btn btn-primary" href="{% url 'folder-detail' folder %}" role="button">Back to folder</a>
+    <a class="btn btn-primary" href="{% url 'studyset-create' %}" role="button">Create a new set</a>
+
+{% endblock %}

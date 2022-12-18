@@ -15,7 +15,9 @@ from .views import (
     StudySetDetailView,
     StudySetUpdateView,
     FolderDetailView,
+    FolderNoneSetList,
     FolderSetRemove,
+    FolderSetAdd,
 )
 
 urlpatterns = [
@@ -35,5 +37,6 @@ urlpatterns = [
     path('studyset/<int:pk>/update', StudySetUpdateView.as_view(), name='studyset-update'),
     path('folder/<int:pk>', FolderDetailView.as_view(), name='folder-detail'),
     path('folder/set/<int:pk>/remove', FolderSetRemove, name='folder-set-remove'),
-
+    path('folder/<int:folder_id>/set/<int:set_id>/add', FolderSetAdd, name='folder-set-add'),
+    path('folder/<int:folder>/set-add', FolderNoneSetList, name='folder-none-set'),
 ]
