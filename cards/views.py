@@ -138,12 +138,14 @@ class StudySetDetailView(DetailView):
 class StudySetCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = StudySet
     fields = ('title', 'description', 'folder')
-    success_url = reverse_lazy('card-list')
     success_message = ('New Study Set created successfully!')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('studyset-detail', kwargs={'pk': self.object.pk})
 
 class StudySetUpdateView(StudySetCreateView, UpdateView):
     success_message = 'Study set updated succesfully!'
@@ -170,14 +172,16 @@ class FolderDetailView(DetailView):
         context['folder_studysets'] = StudySet.objects.all().filter(folder=self.kwargs['pk'])
         return context
 
-class FolderCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class FolderCreateView(LoginRequiredMixin, CreateView):
     model = Folder
     fields = ('title', 'description')
-    success_url = reverse_lazy('card-list')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('folder-detail', kwargs={'pk': self.object.pk})
 
 # returns user's all studysets which has no folder
 def FolderNoneSetList(request, folder):

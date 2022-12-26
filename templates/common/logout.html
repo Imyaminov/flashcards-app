@@ -1,7 +1,17 @@
+<head>
+	{% load crispy_forms_tags %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href= "{% static 'register_login.css' %}">
+	<title>Register User</title>
+</head>
 
+<body>
 <h2>You have been logged out!</h2>
 <div class="border-top pt-3">
     <small class="text-muted">
         <a href="{% url 'login' %}">Log in</a>
     </small>
 </div>
+
+</body>
+

@@ -1,5 +1,11 @@
-{% load crispy_forms_tags %}
+<head>
+	{% load crispy_forms_tags %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href= "{% static 'register_login.css' %}">
+	<title>Register User</title>
+</head>
 
+<body>
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
@@ -7,6 +13,7 @@
                 <legend class="border-bottom mb-4">Log In</legend>
                 {{ form|crispy }}
             </fieldset>
+            <br>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Sign in</button>
             </div>
@@ -17,3 +24,5 @@
             </small>
         </div>
     </div>
+</body>
+

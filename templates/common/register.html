@@ -1,9 +1,12 @@
-{% load crispy_forms_tags %}
-<!--{% load static %}-->
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
-<!--    <link rel="stylesheet" type='text/css' href="{% static 'main.css' %}">-->
+<head>
+	{% load crispy_forms_tags %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href= "{% static 'register_login.css' %}">
+	<title>Register User</title>
+</head>
 
-<div class="content-section">
+<body>
+	<div class="content-section">
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
@@ -12,10 +15,9 @@
                 {%else%}
                     <legend class="border-bottom mb-4">Join Today</legend>
                 {%endif%}
-
                 {{ form|crispy }}
-<!--                    {{ form }}-->
             </fieldset>
+            <br>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Sign Up</button>
             </div>
@@ -26,3 +28,5 @@
             </small>
         </div>
     </div>
+</body>
+

@@ -11,7 +11,7 @@ class UserRegisterView(SuccessMessageMixin, CreateView):
     form_class = CustomUserRegisterForm
     template_name = 'common/register.html'
     success_url = reverse_lazy('login')
-    success_message = 'New Account is created for %(first_name)'
+    success_message = 'New Account is created for %(username)'
 
 
 
