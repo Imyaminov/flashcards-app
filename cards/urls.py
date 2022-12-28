@@ -8,6 +8,7 @@ from .views import (
     BoxView,
     ArchivedCardListView,
     change_status,
+    StudySetCardListView,
     StudySetCreateView,
     StudySetDetailView,
     StudySetUpdateView,
@@ -24,11 +25,13 @@ from .views import (
 urlpatterns = [
     # path('', TemplateView.as_view(template_name='cards/home.html'), name='home')
     path('', CardListView.as_view(), name='card-list'),
+    path('studyset/<int:set_id>/cards', StudySetCardListView.as_view(), name='studyset-card-list'),
     path('card/new/<int:set>', CardCreateView.as_view(), name='card-create'),
     # path('set/<int:set_id>/card/<int:pk>/update', CardUpdateView.as_view(), name='card-update'),
     path('card/<int:pk>/update', CardUpdateView.as_view(), name='card-update'),
     path('card/<int:pk>/delete', CardDeleteView.as_view(), name='card-delete'),
-    path('box/<int:box_num>', BoxView.as_view(), name='box'),
+    path('box/<int:box_num>/studyset/<int:set_id>', BoxView.as_view(), name='box'),
+    # path('box/<int:box_num>', BoxView.as_view(), name='box'),
     path('archive/<int:pk>', change_status, name='change-status'),
     path('archived_cards/', ArchivedCardListView.as_view(), name='archived-cards'),
     path('studyset/new', StudySetCreateView.as_view(), name='studyset-create'),

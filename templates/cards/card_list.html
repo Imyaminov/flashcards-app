@@ -6,8 +6,11 @@
 {% block content %}
     {% include 'cards/success_message.html' %}
 
-    <h2>All Cards</h2>
-
+    {% if set %}
+        <h2>{{set}}</h2>
+    {% else %}
+        <h2>All Cards</h2>
+    {% endif %}
     <div class="btn-group">
         <div class="dropdown show">
           <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,6 +48,20 @@
           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="{% url 'studyset-create' %}">Study Set</a>
             <a class="dropdown-item" href="{% url 'folder-create' %}">Folder</a>
+          </div>
+        </div>
+        <br>
+
+        <div class="dropdown show">
+          <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Check by
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'card-list' %}">All Cards</a>
+              {% for set in study_set %}
+                <a class="dropdown-item" href="{% url 'studyset-card-list' set.id %}">{{set.title}}</a>
+              {% endfor %}
           </div>
         </div>
         <br>

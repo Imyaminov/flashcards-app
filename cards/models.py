@@ -61,8 +61,12 @@ class Card(BaseModel):
 
     def move(self, solved):
         new_box = self.box + 1 if solved else BOXES[0]
-        if new_box in BOXES[:len(BOXES)-1]:
+        print(new_box)
+        if new_box in BOXES[:len(BOXES)]:
             self.box = new_box
+            self.save()
+        else:
+            self.is_archive = True
             self.save()
         return self
 
@@ -71,6 +75,7 @@ class Card(BaseModel):
             self.is_archive = True
         elif self.is_archive:
             self.is_archive = False
+            self.box = BOXES[0]
         self.save()
 
     def __str__(self):

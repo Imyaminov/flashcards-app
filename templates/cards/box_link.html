@@ -2,7 +2,7 @@
 
 <!-- 'boxes' key is from inclusion tag function-->
 {% for box in boxes %}
-    <a href="{% url 'box' box_num=box.number %}">
+    <a href="{% url 'box' box_num=box.number set_id=box.study_set %}">
         🗃 {{ box.number | ordinal }} Box <mark style="background-color: var(--marked);border-radius: 4px;padding: 2px 5px;">{{ box.card_count }}</mark>
     </a>
 {% endfor %}

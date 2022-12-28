@@ -19,9 +19,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from .models import Card, StudySet, Folder
 from .forms import CardCheckForm
-
-# Create your views here.
 from .filters import CardListFilter
+
+
 class CardListView(LoginRequiredMixin, ListView):
     model = Card
     context_object_name = 'card_list'
@@ -38,32 +38,49 @@ class CardListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CardListView, self).get_context_data()
-        context['study_set'] = StudySet.objects.all().filter(author=self.request.user)
-        context['folders'] = Folder.objects.all().filter(author=self.request.user)
-
         queryset = self.get_queryset()
         filter = CardListFilter(self.request.GET, queryset)
+        context['study_set'] = StudySet.objects.all().filter(author=self.request.user)
+        context['folders'] = Folder.objects.all().filter(author=self.request.user)
         context["filter"] = filter
         return context
 
-class BoxView(CardListView):
+class StudySetCardListView(CardListView):
+
+    def get_queryset(self):
+        if self.kwargs['set_id']:
+            queryset = super().get_queryset().filter(study_set=self.kwargs['set_id'])
+        else:
+            queryset = super().get_queryset()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(StudySetCardListView, self).get_context_data()
+        context['set_id'] = self.kwargs['set_id']
+        if self.kwargs['set_id']:
+            context['set'] = StudySet.objects.get(id=self.kwargs['set_id'])
+        return context
+
+
+class BoxView(StudySetCardListView):
     template_name = 'cards/box.html'
     form_class = CardCheckForm
 
     def get_queryset(self):
         user = self.request.user
-        return super().get_queryset().filter(
+        queryset = super().get_queryset().filter(
             box=self.kwargs['box_num'],
-            study_set__author=user
+            study_set__author=user,
         )
+        if self.kwargs['set_id']:
+            queryset = queryset.filter(study_set=self.kwargs['set_id'])
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['box_number'] = self.kwargs['box_num']
         if self.object_list:
             context['check_card'] = random.choices(self.object_list)
-        # pprint(type(random.choices(self.object_list)))
-
         return context
 
     def post(self, request, *args, **kwargs):
@@ -74,7 +91,6 @@ class BoxView(CardListView):
                 id=form.cleaned_data['card_id'],
             )
             card.move(form.cleaned_data['solved'])
-
         return redirect(request.META.get('HTTP_REFERER'))
 
 

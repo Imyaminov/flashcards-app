@@ -3,5 +3,9 @@
 
 <nav>
     <a href="{% url 'card-list' %}">🗂 All Cards</a>
-    {% boxes_as_links user.username %}
+    {% if set_id %}
+        {% boxes_as_links user.username set=set_id %}
+    {% else %}
+        {% boxes_as_links user.username set=0 %}
+    {% endif %}
 </nav>
