@@ -14,7 +14,12 @@
         {{form|crispy}}
         <input type="submit" value="Save Study Set">
     </form>
-    <a href="{% url 'card-list' %}">Cancel</a>
+    {% if studyset %}
+        <a href="{% url 'studyset-detail' studyset.id %}">Cancel</a>
+     {% else %}
+        <a href="{% url 'card-list' %}">Cancel</a>
+     {% endif %}
+
     <br><br>
 {% endblock %}
 

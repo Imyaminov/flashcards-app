@@ -21,16 +21,11 @@ from .models import Card, StudySet, Folder
 from .forms import CardCheckForm
 
 # Create your views here.
-
+from .filters import CardListFilter
 class CardListView(LoginRequiredMixin, ListView):
     model = Card
     context_object_name = 'card_list'
-
-    def get_context_data(self, **kwargs):
-        context = super(CardListView, self).get_context_data()
-        context['study_set'] = StudySet.objects.all().filter(author=self.request.user)
-        context['folders'] = Folder.objects.all().filter(author=self.request.user)
-        return context
+    filter_set = CardListFilter
 
     def get_queryset(self):
         user = self.request.user
@@ -38,7 +33,18 @@ class CardListView(LoginRequiredMixin, ListView):
             is_archive=False,
             study_set__author=user,
         ).order_by('box', 'created_at')
-        return queryset
+        card_filter = CardListFilter(self.request.GET, queryset=queryset)
+        return card_filter.qs
+
+    def get_context_data(self, **kwargs):
+        context = super(CardListView, self).get_context_data()
+        context['study_set'] = StudySet.objects.all().filter(author=self.request.user)
+        context['folders'] = Folder.objects.all().filter(author=self.request.user)
+
+        queryset = self.get_queryset()
+        filter = CardListFilter(self.request.GET, queryset)
+        context["filter"] = filter
+        return context
 
 class BoxView(CardListView):
     template_name = 'cards/box.html'
@@ -72,22 +78,42 @@ class BoxView(CardListView):
         return redirect(request.META.get('HTTP_REFERER'))
 
 
-class CardCreateView(SuccessMessageMixin, CreateView):
+class CardCreateView(LoginRequiredMixin, CreateView):
     model = Card
-    fields = ('question', 'answer', 'study_set', 'box')
-    success_url = reverse_lazy('card-create')
-    success_message = "The card is created successfully!"
+    fields = ('question', 'answer', 'box')
 
-    def get_form_class(self):
-        modelform = super().get_form_class()
-        modelform.base_fields['study_set'].limit_choices_to = {'author': self.request.user}
-        return modelform
+    # def get_form_class(self):
+    #     modelform = super().get_form_class()
+    #     modelform.base_fields['study_set'].limit_choices_to = {'author': self.request.user}
+    #     return modelform
 
-class CardUpdateView(CardCreateView, UpdateView):
-    success_url = reverse_lazy('card-list')
-    success_message = "The card is updated successfully!"
+    def get_context_data(self, **kwargs):
+        context = super(CardCreateView, self).get_context_data()
+        context['set_id'] = self.kwargs['set']
+        return context
 
-class CardDeleteView(DeleteView):
+    def form_valid(self, form, *args):
+        form.instance.study_set = StudySet.objects.get(pk=self.kwargs['set'])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('card-create', kwargs={'set': self.kwargs['set']})
+
+class CardUpdateView(UpdateView):
+    model = Card
+    fields = ('question', 'answer')
+    template_name = 'cards/card_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CardUpdateView, self).get_context_data()
+        card_set_id = StudySet.objects.get(studyset=self.kwargs['pk'])
+        context['set_id'] = card_set_id.id
+        return context
+
+    def get_success_url(self):
+        return reverse('studyset-detail', kwargs={'pk': self.object.study_set_id})
+
+class CardDeleteView(LoginRequiredMixin, DeleteView):
     model = Card
     template_name = 'cards/studyset_detail.html'
 
@@ -98,7 +124,7 @@ class CardDeleteView(DeleteView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
-class ArchivedCardListView(ListView):
+class ArchivedCardListView(LoginRequiredMixin, ListView):
     context_object_name = 'archived_cards'
     template_name = 'cards/archived_cards.html'
 
@@ -125,7 +151,7 @@ def change_status(request, pk):
 #         set = StudySet.objects.all().filter(author=self.request.user)
 #         return set
 
-class StudySetDetailView(DetailView):
+class StudySetDetailView(LoginRequiredMixin, DetailView):
     model = StudySet
     context_object_name = 'studyset_detail'
     template_name = 'cards/studyset_detail.html'
@@ -153,6 +179,11 @@ class StudySetUpdateView(StudySetCreateView, UpdateView):
     def get_success_url(self):
         return reverse('studyset-detail', kwargs={'pk': self.kwargs['pk']})
 
+class StudySetDeleteView(LoginRequiredMixin, DeleteView):
+    model = StudySet
+    template_name = 'cards/studyset_detail.html'
+    success_url = reverse_lazy('card-list')
+
 # class FolderListView(ListView):
 #     model = Folder
 #     context_object_name = 'folders'
@@ -162,7 +193,7 @@ class StudySetUpdateView(StudySetCreateView, UpdateView):
 #         set = Folder.objects.all().filter(author=self.request.user)
 #         return set
 
-class FolderDetailView(DetailView):
+class FolderDetailView(LoginRequiredMixin, DetailView):
     model = Folder
     context_object_name = 'folder_detail'
     template_name = 'cards/folder_detail.html'
@@ -182,6 +213,16 @@ class FolderCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('folder-detail', kwargs={'pk': self.object.pk})
+
+class FolderUpdateView(FolderCreateView, UpdateView):
+
+    def get_success_url(self):
+        return reverse('folder-detail', kwargs={'pk': self.object.pk})
+
+class FolderDeleteView(LoginRequiredMixin, DeleteView):
+    model = Folder
+    template_name = 'cards/folder_detail.html'
+    success_url = reverse_lazy('card-list')
 
 # returns user's all studysets which has no folder
 def FolderNoneSetList(request, folder):

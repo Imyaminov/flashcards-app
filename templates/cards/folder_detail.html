@@ -5,7 +5,15 @@
     {% if folder_studysets %}
         <h4><small>{{folder_studysets.count}} set{{folder_studysets.count|pluralize:'s'}}</small></h4>
     {% endif %}
-    <h1>📂 {{folder_detail.title}}</h1>
+    <div>
+        <h1>
+            {{folder_detail.title}}
+            <a class="btn btn-outline-secondary btn-sm rounded-circle" href="{% url 'folder-update' folder_detail.id %}" >🖊️</a>
+             <a type="button" class="btn btn-outline-danger btn-sm rounded-circle" data-toggle="modal" data-target="#exampleModal">
+            🗑️
+            </a>
+        </h1>
+    </div>
     {% for set in folder_studysets %}
         <div class="card w-100">
               <div class="card-body " >
@@ -26,4 +34,34 @@
     <div class="d-grid gap-2 ">
         <a class="btn btn-primary btn-lg btn-block btn-sm" href="{% url 'folder-none-set' folder_detail.id %}" role="button">Add Set</a>
     </div>
+
+<!--  bootstrap model for current folder delete confirmation  -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete this Folder?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <h4>{{folder_detail.title}}</h4>
+              <p>
+                  Deleting a folder is a PERMANENT action. This cannot be undone.
+                  Are you sure you want to delete this folder? The sets in this folder will not be deleted.
+              </p>
+          </div>
+
+          <form method="POST" action="{% url 'folder-delete' folder_detail.id %}">
+              {% csrf_token %}
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" >Yes, delete this folder</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from helpers.models import BaseModel
 from common.models import CustomUser
 # Create your models here.
@@ -23,7 +24,7 @@ class StudySet(BaseModel):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_studyset')
     folder = models.ForeignKey(
         Folder,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         blank=True, null=True,
         related_name='folder_studyset'
     )
@@ -74,8 +75,6 @@ class Card(BaseModel):
 
     def __str__(self):
         return "{} - {}".format(self.question, self.answer)
-
-
 
 
 

@@ -6,9 +6,12 @@
         <h5><small>{{studyset_cards.count}} card{{studyset_cards.count|pluralize:'s'}}</small></h5>
     {% endif %}
     <div>
-    <h1>{{studyset_detail.title}}
-    <a class="btn btn-outline-secondary btn-sm rounded-circle" href="{% url 'studyset-update' studyset_detail.id %}" >🖊️</a>
+        <h1>{{studyset_detail.title}}
+        <a class="btn btn-outline-secondary btn-sm rounded-circle" href="{% url 'studyset-update' studyset_detail.id %}" >🖊️</a>
 <!--    <a class="btn btn-outline-primary btn-sm rounded-circle" href='' >🗑️</a>-->
+        <a type="button" class="btn btn-outline-danger btn-sm rounded-circle" data-toggle="modal" data-target="#exampleModal">
+        🗑️
+        </a>
     </h1>
     </div>
     {% if studyset_cards %}
@@ -40,7 +43,35 @@
         <h4><small>No cards in this Set!</small></h4>
     {% endif %}
 
+<!--  bootstrap model for current set delete confirmation  -->
     <div class="d-grid gap-2 ">
-        <a class="btn btn-primary" href="{% url 'card-create' %}" role="button">Add term</a>
+            <a class="btn btn-primary" href="{% url 'card-create' studyset_detail.id %}" role="button">Add term</a>
     </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete this set?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <h4>{{studyset_detail.title}}</h4>
+              <p>You are about to delete this set and all of its data. No one will be able to access this set ever again.</p>
+              <h6>Are you sure? This cannot be undone.</h6>
+          </div>
+
+          <form method="POST" action="{% url 'studyset-delete' studyset_detail.id %}">
+              {% csrf_token %}
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" >Yes, delete this set</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}

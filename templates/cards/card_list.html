@@ -1,11 +1,13 @@
 {% extends './base.html' %}
 {% load humanize %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block content %}
     {% include 'cards/success_message.html' %}
-    <h2>
-        All Cards
-    </h2>
+
+    <h2>All Cards</h2>
+
     <div class="btn-group">
         <div class="dropdown show">
           <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -17,7 +19,7 @@
                 <ul class="dropdown-menu">
                     {% for set in study_set %}
                         <li><a class="dropdown-item" href="{% url 'studyset-detail' set.id %}">
-                            {{set.title}}
+                            {{set.title}}  <span class="badge badge-primary">{{set.card_count}}</span>
                         </a></li>
                     {% endfor %}
                  </ul>
@@ -35,18 +37,16 @@
           </ul>
         </div>
 
-        <div class=" dropdown show">
+        <div class="dropdown show">
           <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Create
           </a>
 
           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="{% url 'card-create' %}">Card</a>
             <a class="dropdown-item" href="{% url 'studyset-create' %}">Study Set</a>
             <a class="dropdown-item" href="{% url 'folder-create' %}">Folder</a>
           </div>
         </div>
-
         <br>
         {% if user.is_authenticated %}
             <a class="float-left btn btn-primary " href="{% url 'logout' %}" role="button">Log out</a>
@@ -54,8 +54,20 @@
             <a class="btn btn-primary" href="{% url 'login' %}" role="button">Sign up/Sign in</a>
         {% endif %}
     </div>
-    <br><br>
-    {% for card in card_list %}
+
+    <form method="get">
+        <div class="row">
+            <div class="form-group col-md-10 my-1">
+              {% render_field filter.form.study_set class="form-control" %}
+            </div>
+            <button type="submit" class="btn btn-primary col-md-1.5 my-1">
+                 <span class="glyphicon glyphicon-search"></span> Filter by Set
+            </button>
+        </div>
+    </form>
+    <br>
+
+    {% for card in filter.qs %}
         {% ifchanged %}
             <h3>🗃 {{ card.box|ordinal }} Box</h3>
         {% endifchanged %}

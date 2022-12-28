@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    {% if card %}
+    {% if folder %}
         <h2>✏ Edit Folder</h2>
     {% else %}
         {% include 'cards/success_message.html' %}
@@ -14,7 +14,12 @@
         {{form|crispy}}
         <input type="submit" value="Save Folder">
     </form>
-    <a href="{% url 'card-list' %}">Cancel</a>
+
+    {% if folder %}
+            <a href="{% url 'folder-detail' folder.id %}">Cancel</a>
+    {% else %}
+            <a href="{% url 'card-list' %}">Cancel</a>
+    {% endif %}
     <br><br>
 {% endblock %}
 
