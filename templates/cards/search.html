@@ -1,0 +1,106 @@
+{% extends './base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <form class="form-outline" action="{% url 'search' %}">
+         <div class="input-group">
+             <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">🔎</span>
+             </div>
+             <input type="search" name="search" class="form-control" placeholder="Folders, Study Sets, Questions" aria-label="Search"/>
+         </div>
+    </form>
+    <br>
+    <div class="card text-center">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="myTab">
+                <li class="nav-item">
+                    <a href="#all" class="nav-link active" data-bs-toggle="tab">All results</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#folders" class="nav-link" data-bs-toggle="tab">Folders</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#sets" class="nav-link" data-bs-toggle="tab">Study sets</a>
+                </li><li class="nav-item">
+                    <a href="#questions" class="nav-link" data-bs-toggle="tab">Questions</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                {% if request.GET.search %}
+                    <div class="tab-pane fade show active text-left" id="all">
+                        {% include 'cards/search_results.html' %}
+                    </div>
+                    <div class="tab-pane fade text-left" id="folders">
+                        {% if folder_result %}
+                            <h5><span class="badge badge-secondary badge-pill">{{folder_result|length}} results</span></h5>
+                            <div class="row">
+                                {% for folder in folder_result %}
+                                    <div class="col-sm-4 p-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                              <h5 class="card-title">{{folder.title}}</h5>
+                                            </div>
+                                            <div class="card-footer d-flex justify-content-between">
+                                                <a href="{% url 'folder-detail' folder.id %}" class="btn btn-primary btn-sm">Preview</a>
+                                                <p class="card-text"><small class="text-muted">{{folder.set_count}} sets</small></p>
+                                              </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="tab-pane fade text-left" id="sets">
+                        {% if studyset_result %}
+                            <h5><span class="badge badge-secondary badge-pill">{{studyset_result|length}} results</span></h5>
+                            <div class="row">
+                                {% for set in studyset_result %}
+                                    <div class="col-sm-4 p-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                              <h5 class="card-title">{{set.title}}</h5>
+                                            </div>
+                                            <div class="card-footer d-flex justify-content-between">
+                                                <a href="{% url 'studyset-detail' set.id %}" class="btn btn-primary btn-sm">Preview</a>
+                                                <p class="card-text"><small class="text-muted">{{set.card_num}} terms</small></p>
+                                              </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div><div class="tab-pane fade text-left" id="questions">
+                        {% if question_result %}
+                            <h5><span class="badge badge-secondary badge-pill">{{question_result|length}} results</span></h5>
+                            <div class="row">
+                                {% for question in question_result %}
+                                    <div class="col-sm-6 p-3">
+                                        <div class="card text-left">
+                                            <div class="card-header p-2">
+                                                <a href="{% url 'studyset-detail' question.study_set.id %}" >{{question.study_set}} - set</a>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text ">{{question.question}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <h3>Search the App</h3>
+                    <h4>You can find Folders, Study sets and Questions</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

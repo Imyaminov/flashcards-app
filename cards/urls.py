@@ -2,6 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 from .views import (
     CardListView,
+    SearchListView,
     CardCreateView,
     CardUpdateView,
     CardDeleteView,
@@ -25,6 +26,7 @@ from .views import (
 urlpatterns = [
     # path('', TemplateView.as_view(template_name='cards/home.html'), name='home')
     path('', CardListView.as_view(), name='card-list'),
+    path('search/', SearchListView.as_view(), name='search'),
     path('studyset/<int:set_id>/cards', StudySetCardListView.as_view(), name='studyset-card-list'),
     path('card/new/<int:set>', CardCreateView.as_view(), name='card-create'),
     # path('set/<int:set_id>/card/<int:pk>/update', CardUpdateView.as_view(), name='card-update'),

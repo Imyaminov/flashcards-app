@@ -11,85 +11,88 @@
     {% else %}
         <h2>All Cards</h2>
     {% endif %}
-    <div class="btn-group">
-        <div class="dropdown show">
-          <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Your Library
-          </a>
-          <ul class="dropdown-menu">
-              <li class="dropdown-submenu">
-                <a class="test" tabindex="-1">Study Set</a>
-                <ul class="dropdown-menu">
-                    {% for set in study_set %}
-                        <li><a class="dropdown-item" href="{% url 'studyset-detail' set.id %}">
-                            {{set.title}}  <span class="badge badge-primary">{{set.card_count}}</span>
-                        </a></li>
-                    {% endfor %}
-                 </ul>
-              </li>
-              <li class="dropdown-submenu">
-                <a class="test" tabindex="-1">Folder</a>
-                <ul class="dropdown-menu">
-                    {% for folder in folders %}
-                        <li><a class="dropdown-item" href="{% url 'folder-detail' folder.id %}">
-                            {{folder.title}}
-                        </a></li>
-                    {% endfor %}
-                 </ul>
-              </li>
-          </ul>
-        </div>
-
-        <div class="dropdown show">
-          <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Create
-          </a>
-
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="{% url 'studyset-create' %}">Study Set</a>
-            <a class="dropdown-item" href="{% url 'folder-create' %}">Folder</a>
-          </div>
-        </div>
-        <br>
-
-        <div class="dropdown show">
-          <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Check by
-          </a>
-
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="{% url 'card-list' %}">All Cards</a>
-              {% for set in study_set %}
-                <a class="dropdown-item" href="{% url 'studyset-card-list' set.id %}">{{set.title}}</a>
-              {% endfor %}
-          </div>
-        </div>
-        <br>
-        {% if user.is_authenticated %}
-            <a class="float-left btn btn-primary " href="{% url 'logout' %}" role="button">Log out</a>
-        {% else %}
-            <a class="btn btn-primary" href="{% url 'login' %}" role="button">Sign up/Sign in</a>
-        {% endif %}
-    </div>
-
-    <form method="get">
-        <div class="row">
-            <div class="form-group col-md-10 my-1">
-              {% render_field filter.form.study_set class="form-control" %}
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-3 text-center" role="group">
+            <div class="dropdown show">
+              <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Your Library
+              </a>
+              <ul class="dropdown-menu">
+                  <li class="dropdown-submenu">
+                    <a class="test" tabindex="-1">Study Set</a>
+                    <ul class="dropdown-menu">
+                        {% for set in study_set %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'studyset-detail' set.id %}">
+                                    {{set.title}}
+                                    <span class="badge badge-primary badge-pill">{{set.card_count}}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                     </ul>
+                  </li>
+                  <li class="dropdown-submenu">
+                    <a class="test" tabindex="-1">Folder</a>
+                    <ul class="dropdown-menu">
+                        {% for folder in folders %}
+                            <li><a class="dropdown-item" href="{% url 'folder-detail' folder.id %}">
+                                {{folder.title}}
+                            </a></li>
+                        {% endfor %}
+                     </ul>
+                  </li>
+              </ul>
             </div>
-            <button type="submit" class="btn btn-primary col-md-1.5 my-1">
-                 <span class="glyphicon glyphicon-search"></span> Filter by Set
-            </button>
-        </div>
-    </form>
-    <br>
+            <div class="dropdown show">
+              <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Create
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'studyset-create' %}">Study Set</a>
+                <a class="dropdown-item" href="{% url 'folder-create' %}">Folder</a>
+              </div>
+            </div>
+            <div class="dropdown show">
+              <a class="btn btn-primary dropdown-toggle" style="margin-right: 1em" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Check by
+              </a>
 
-    {% for card in filter.qs %}
-        {% ifchanged %}
-            <h3>🗃 {{ card.box|ordinal }} Box</h3>
-        {% endifchanged %}
-        {% include './card.html' %}
-    {% endfor %}
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'card-list' %}">All Cards</a>
+                  <div class="dropdown-divider"></div>
+                  {% for set in study_set %}
+                    <a class="dropdown-item" href="{% url 'studyset-card-list' set.id %}">{{set.title}}</a>
+                  {% endfor %}
+              </div>
+            </div>
+        </div>
+
+        <div class="btn-group mr-3 text-center" role="group">
+            <a class="btn btn-primary" href="{% url 'search' %}" role="button">Search</a>
+        </div>
+
+        <div class="btn-group mr-3 text-center" role="group">
+            {% if user.is_authenticated %}
+                <a class="btn btn-primary " href="{% url 'logout' %}" role="button">Log out</a>
+            {% else %}
+                <a class="btn btn-primary" href="{% url 'login' %}" role="button">Sign up/Sign in</a>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    {% if card_list %}
+        {% for card in card_list %}
+            {% ifchanged %}
+                <h3>🗃 {{ card.box|ordinal }} Box</h3>
+            {% endifchanged %}
+            {% include './card.html' %}
+        {% endfor %}
+    {% else %}
+        <h2>🤭There is no card in this Study Set</h2>
+         <div class="row justify-content-center">
+            <a class="btn btn-primary" href="{% url 'card-create' set_id %}" role="button">Add term</a>
+         </div>
+    {% endif %}
 
     <script>
         $(document).ready(function(){

@@ -67,3 +67,6 @@ border-right-width: 0;
 table {
  width: 100%;
 }
+.text-center {
+  text-align: justify;
+}

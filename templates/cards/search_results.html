@@ -1,0 +1,67 @@
+
+
+        {% if folder_result %}
+            <div class="d-flex justify-content-between">
+              <h4>Folders</h4>
+              <a href="#folders" class="nav-link" data-bs-toggle="tab">View all</a>
+            </div>
+                <div class="row">
+                {% for folder in folder_result|slice:'3' %}
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                              <h5 class="card-title">{{folder.title}}</h5>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <a href="{% url 'folder-detail' folder.id %}" class="btn btn-primary btn-sm">Preview</a>
+                                <p class="card-text"><small class="text-muted">{{folder.set_count}} sets</small></p>
+                              </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+        {% endif %}
+        <br>
+        {% if studyset_result %}
+            <div class="d-flex justify-content-between">
+              <h4>Study sets</h4>
+              <a href="#sets" class="nav-link" data-bs-toggle="tab">View all</a>
+            </div>
+                <div class="row">
+                {% for set in studyset_result|slice:'3' %}
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                              <h5 class="card-title">{{set.title}}</h5>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <a href="{% url 'studyset-detail' set.id %}" class="btn btn-primary btn-sm">Preview</a>
+                                <p class="card-text"><small class="text-muted">{{set.card_num}} terms</small></p>
+                              </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+        {% endif %}
+        <br>
+        {% if question_result %}
+            <div class="d-flex justify-content-between">
+              <h4>Questions</h4>
+              <a href="#sets" class="nav-link" data-bs-toggle="tab">View all</a>
+            </div>
+            <div class="row">
+                {% for question in question_result|slice:'4' %}
+                    <div class="col-sm-6 p-3">
+                        <div class="card text-left">
+                            <div class="card-header p-2">
+                                <a href="{% url 'studyset-detail' question.study_set.id %}" >{{question.study_set}} - set</a>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text ">{{question.question}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+

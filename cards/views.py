@@ -17,6 +17,7 @@ from django.contrib.messages.views import (
 )
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
+from django.db.models import Q, Count
 from .models import Card, StudySet, Folder
 from .forms import CardCheckForm
 from .filters import CardListFilter
@@ -25,7 +26,6 @@ from .filters import CardListFilter
 class CardListView(LoginRequiredMixin, ListView):
     model = Card
     context_object_name = 'card_list'
-    filter_set = CardListFilter
 
     def get_queryset(self):
         user = self.request.user
@@ -33,8 +33,7 @@ class CardListView(LoginRequiredMixin, ListView):
             is_archive=False,
             study_set__author=user,
         ).order_by('box', 'created_at')
-        card_filter = CardListFilter(self.request.GET, queryset=queryset)
-        return card_filter.qs
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(CardListView, self).get_context_data()
@@ -42,7 +41,6 @@ class CardListView(LoginRequiredMixin, ListView):
         filter = CardListFilter(self.request.GET, queryset)
         context['study_set'] = StudySet.objects.all().filter(author=self.request.user)
         context['folders'] = Folder.objects.all().filter(author=self.request.user)
-        context["filter"] = filter
         return context
 
 class StudySetCardListView(CardListView):
@@ -59,6 +57,22 @@ class StudySetCardListView(CardListView):
         context['set_id'] = self.kwargs['set_id']
         if self.kwargs['set_id']:
             context['set'] = StudySet.objects.get(id=self.kwargs['set_id'])
+        return context
+
+class SearchListView(CardListView):
+    template_name = 'cards/search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchListView, self).get_context_data()
+        query = self.request.GET.get('search')
+        if query:
+            context['folder_result'] = Folder.objects.all().filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            ).annotate(set_count=Count('folder_studyset'))
+            context['studyset_result'] = StudySet.objects.all().filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            ).annotate(card_num=Count('studyset'))
+            context['question_result'] = Card.objects.all().filter(question__icontains=query)
         return context
 
 
